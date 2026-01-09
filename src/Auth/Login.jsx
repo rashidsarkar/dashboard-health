@@ -1,9 +1,16 @@
-import React from "react";
-import { Form, Input, Button, Checkbox } from "antd";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Form, Input, Button, Checkbox, message } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLoginAdminMutation } from "../page/redux/api/userApi";
+import { setToken, setUser } from "../page/redux/features/auth/authSlice";
 import logo from "../assets/header/logo.png";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const [loginAdmin, { isLoading }] = useLoginAdminMutation();
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#F0FDFF] px-4">
       <div className="w-full max-w-md p-8 bg-white border shadow-sm rounded-2xl border-cyan-100">
@@ -16,7 +23,35 @@ const Login = () => {
           </p>
         </div>
 
-        <Form layout="vertical" onFinish={(v) => console.log(v)}>
+        <Form
+          layout="vertical"
+          form={form}
+          onFinish={async (values) => {
+            try {
+              const response = await loginAdmin({
+                email: values.email,
+                password: values.password,
+              }).unwrap();
+
+              if (response.data && response.data.accessToken) {
+                // Dispatch token and user to Redux
+                dispatch(setToken(response.data.accessToken));
+                if (response.data.user) {
+                  dispatch(setUser(response.data.user));
+                }
+
+                message.success(response.message || "Login successful");
+
+                // Redirect to dashboard
+                navigate("/");
+              }
+            } catch (error) {
+              const errorMessage =
+                error?.data?.message || "Login failed. Please try again.";
+              message.error(errorMessage);
+            }
+          }}
+        >
           <Form.Item
             label="Email Address"
             name="email"
@@ -51,9 +86,11 @@ const Login = () => {
 
           <Button
             htmlType="submit"
+            loading={isLoading}
+            disabled={isLoading}
             className="w-full h-12 bg-[#10A4B2] hover:bg-[#0d8c99] text-white border-none rounded-lg text-lg font-medium"
           >
-            Sign In
+            {isLoading ? "Signing In..." : "Sign In"}
           </Button>
         </Form>
       </div>
