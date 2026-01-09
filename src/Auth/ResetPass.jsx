@@ -1,12 +1,13 @@
 import { Button, Form, Input } from "antd";
 import { Link } from "react-router-dom";
+import logo from "../assets/header/logo.png";
 
 const ResetPass = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#F0FDFF] px-4">
       <div className="w-full max-w-md p-8 bg-white border shadow-sm rounded-2xl border-cyan-100">
         <div className="mb-8 text-center">
-          <img src="/logo.png" alt="Logo" className="h-12 mx-auto mb-4" />
+          <img src={logo} alt="Logo" className="h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-800">
             Get a new password
           </h2>

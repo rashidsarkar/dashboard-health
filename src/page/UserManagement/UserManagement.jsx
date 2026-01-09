@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Pagination, Table, message } from "antd";
+import { Table, message } from "antd";
 import { LuEye } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { AiOutlinePhone, AiOutlineMail } from "react-icons/ai";
+import { useNavigate } from "react-router-dom"; // Added for navigation
+import CustomPagination from "../../components/CustomPagination/CustomPagination";
 
 const UserManagement = () => {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
@@ -30,9 +32,6 @@ const UserManagement = () => {
     image: `https://avatar.iran.liara.run/public/${index + 1}`,
   }));
 
-  const [isModalOpen2, setIsModalOpen2] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-
   const columns = [
     {
       title: "User’s Name",
@@ -54,17 +53,14 @@ const UserManagement = () => {
       render: (_, record) => (
         <div className="flex justify-end gap-2 pr-4">
           <button
-            onClick={() => {
-              setSelectedUser(record);
-              setIsModalOpen2(true);
-            }}
-            className="w-8 h-8 flex justify-center items-center bg-[#10A4B2] text-white rounded-md"
+            onClick={() => navigate(`/user-details/${record.key}`)} // Navigates instead of modal
+            className="w-8 h-8 flex justify-center items-center bg-[#10A4B2] text-white rounded-md hover:bg-[#0d8c99] transition-all"
           >
             <LuEye size={18} />
           </button>
           <button
             onClick={() => message.error(`Blocked ${record.name}`)}
-            className="w-8 h-8 flex justify-center items-center bg-[#EF4444] text-white rounded-md"
+            className="w-8 h-8 flex justify-center items-center bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-all"
           >
             <RxCross2 size={18} />
           </button>
@@ -74,13 +70,15 @@ const UserManagement = () => {
   ];
 
   return (
-    /* Flex container to push pagination to the bottom */
     <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
-      {/* Top Header & Content Area */}
       <div className="flex-1 p-8">
+        {/* Header */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
-            <IoArrowBackOutline className="text-[#10A4B2] text-2xl cursor-pointer" />
+            <IoArrowBackOutline
+              className="text-[#10A4B2] text-2xl cursor-pointer"
+              onClick={() => navigate(-1)}
+            />
             <h1 className="text-lg font-bold text-gray-800">User management</h1>
           </div>
           <div className="flex gap-4">
@@ -93,6 +91,7 @@ const UserManagement = () => {
           </div>
         </div>
 
+        {/* Table */}
         <Table
           dataSource={dummyUsers.slice(
             (currentPage - 1) * pageSize,
@@ -104,23 +103,13 @@ const UserManagement = () => {
         />
       </div>
 
-      {/* FULL WIDTH PAGINATION BAR */}
-      <div className="w-full bg-[#E6E7E8] py-4 flex justify-center border-t border-gray-200">
-        <Pagination
-          current={currentPage}
-          total={dummyUsers.length}
-          pageSize={pageSize}
-          onChange={(page) => setCurrentPage(page)}
-          showSizeChanger={false}
-          itemRender={(page, type, originalElement) => {
-            if (type === "prev")
-              return <span className="px-2 text-gray-400">{"<"}</span>;
-            if (type === "next")
-              return <span className="px-2 text-gray-400">{">"}</span>;
-            return originalElement;
-          }}
-        />
-      </div>
+      {/* REUSABLE PAGINATION COMPONENT */}
+      <CustomPagination
+        total={dummyUsers.length}
+        pageSize={pageSize}
+        current={currentPage}
+        onChange={(page) => setCurrentPage(page)}
+      />
 
       <style>{`
         .custom-user-table .ant-table { background: transparent !important; }
@@ -134,46 +123,7 @@ const UserManagement = () => {
           border-bottom: none !important;
           padding: 14px 8px !important;
         }
-
-        /* Pagination Square Buttons */
-        .ant-pagination-item, .ant-pagination-prev, .ant-pagination-next {
-          background: white !important;
-          border: none !important;
-          border-radius: 4px !important;
-          min-width: 32px !important;
-          height: 32px !important;
-          line-height: 32px !important;
-        }
-        .ant-pagination-item-active {
-          background-color: #10A4B2 !important;
-        }
-        .ant-pagination-item-active a {
-          color: white !important;
-        }
       `}</style>
-
-      {/* Modal */}
-      <Modal
-        open={isModalOpen2}
-        centered
-        onCancel={() => setIsModalOpen2(false)}
-        footer={null}
-      >
-        {selectedUser && (
-          <div className="p-4 text-center">
-            <img
-              src={selectedUser.image}
-              className="w-24 h-24 mx-auto mb-4 rounded-full"
-              alt="profile"
-            />
-            <h2 className="text-xl font-bold">{selectedUser.name}</h2>
-            <p className="mt-2">
-              <AiOutlineMail className="inline mr-2" />
-              {selectedUser.email}
-            </p>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };

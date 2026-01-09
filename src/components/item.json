@@ -13,10 +13,16 @@
   },
 
   {
-    "key": "subscription",
-    "label": "Subscription",
+    "key": "providerManagement",
+    "label": "ProviderManagement",
     "icon": "TbCategory2",
-    "link": "/dashboard/Subscription"
+    "link": "/dashboard/ProviderManagement"
+  },
+  {
+    "key": "bookingManagement",
+    "label": "BookingManagement",
+    "icon": "TbCategory2",
+    "link": "/dashboard/BookingManagement"
   },
   {
     "key": "settings",

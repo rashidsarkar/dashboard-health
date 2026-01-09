@@ -6,6 +6,8 @@ import UserGrowthChart from "./UserGrowthChart";
 import BookingGrowth from "./BookingGrowth";
 import ShopRegistration from "./ShopRegister";
 import ProviderGrowth from "./ProviderGrowthChart";
+import UserManagement from "../../page/UserManagement/UserManagement";
+import UserManagementDashbordHome from "../../page/UserManagement/UserManagementDashbordHome";
 
 // Reusable Stat Card Component to keep code clean
 const StatCard = ({ title, value, icon: Icon }) => (
@@ -51,7 +53,8 @@ const Dashboard = () => {
 
       {/* Bottom Section */}
       <div className="w-full p-6 mt-8 bg-white border border-gray-100 shadow-sm rounded-xl">
-        <ShopRegistration />
+        <p className="text-2xl font-bold">Recent Appointments Request</p>
+        <UserManagementDashbordHome />
       </div>
     </div>
   );

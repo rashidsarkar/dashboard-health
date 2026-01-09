@@ -19,6 +19,8 @@ import Notification from "../page/Notification/Notification";
 import About from "../page/Settings/About";
 import Login from "../Auth/Login";
 import ForgetPass from "../Auth/ForgetPass";
+import ProviderManagement from "../page/ProviderManagement/ProviderManagement";
+import BookingManagement from "../page/BookingManagement/BookingManagement";
 
 export const router = createBrowserRouter([
   {
@@ -34,8 +36,12 @@ export const router = createBrowserRouter([
         element: <UserManagement></UserManagement>,
       },
       {
-        path: "/dashboard/CreatorManagement",
-        element: <CreatorManagement></CreatorManagement>,
+        path: "/dashboard/ProviderManagement",
+        element: <ProviderManagement></ProviderManagement>,
+      },
+      {
+        path: "/dashboard/BookingManagement",
+        element: <BookingManagement></BookingManagement>,
       },
       {
         path: "/dashboard/CategoriesManagement/Categories",
