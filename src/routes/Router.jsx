@@ -13,22 +13,17 @@ import PrivacyPolicy from "../page/Settings/PrivacyPolicy";
 import Categories from "../page/CategoriesManagement/Categories";
 import Subcategory from "../page/CategoriesManagement/Subcategory";
 
-import ForgetPass from "../Auth/ForgetPass";
 import Verify from "../Auth/Verify";
 import ResetPass from "../Auth/ResetPass";
 import Notification from "../page/Notification/Notification";
 import About from "../page/Settings/About";
 import Login from "../Auth/Login";
-
+import ForgetPass from "../Auth/ForgetPass";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-     
-        <DashboardLayout></DashboardLayout>
-      
-    ),
+    element: <DashboardLayout></DashboardLayout>,
     children: [
       {
         path: "/",

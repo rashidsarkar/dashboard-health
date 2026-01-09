@@ -1,30 +1,25 @@
-import React, { useState } from "react";
-import { Form, Input, Button } from "antd";
-import { FaEye, FaEyeSlash, FaGoogle, FaFacebookF } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Button } from "antd";
+import React from "react";
 import OTPInput from "react-otp-input";
-
+import { Link } from "react-router-dom";
+// import logo from "../assets/header/logo.png";
 
 const Verify = () => {
-  
- const [otp, setOtp] = useState("");
-  const onFinish = (values) => {
-    console.log("Form Values:", values);
-  };
+  const [otp, setOtp] = React.useState("");
   return (
-   <div className="flex justify-center items-center min-h-screen px-4 lg:px-0">
-      <div className="w-full max-w-lg  p-8 border">
-        {/* Title */}
-        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-          Check your email
-        </h2>
-        <p className="text-gray-600 mb-6 text-sm">
-          We sent a reset link to foisalrk2@gmail.com. Enter the 5-digit code
-          mentioned in the email.
-        </p>
+    <div className="flex justify-center items-center min-h-screen bg-[#F0FDFF] px-4">
+      <div className="w-full max-w-md p-8 bg-white border shadow-sm rounded-2xl border-cyan-100">
+        <div className="mb-8 text-center">
+          {/* <img src={logo} alt="Logo" className="h-12 mx-auto mb-4" /> */}
+          <h2 className="text-2xl font-bold text-gray-800">
+            Verify Your Account
+          </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Please enter the code sent to your email to continue
+          </p>
+        </div>
 
-        {/* Ant Design Form */}
-        <div className="flex justify-center mb-5">
+        <div className="flex justify-center mb-8">
           <OTPInput
             value={otp}
             onChange={setOtp}
@@ -33,33 +28,26 @@ const Verify = () => {
             renderInput={(props) => (
               <input
                 {...props}
-                className="w-16 h-16 text-center bg-white text-lg border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                style={{ width: "40px", height: "50px" }}
+                className="!w-[50px] h-[60px] text-center bg-white border border-gray-200 rounded-lg focus:border-[#10A4B2] focus:ring-1 focus:ring-[#10A4B2] outline-none text-xl transition-all"
               />
             )}
           />
         </div>
-        <Link to={"/reset-password"}>
-          <button
-            htmlType="submit"
-            className="w-full bg-red-500 py-3 text-white rounded-md hover:bg-primary-dark transition-colors"
-          >
-            Continue
-          </button>
+
+        <Link to="/reset-password">
+          <Button className="w-full h-12 bg-[#10A4B2] hover:bg-[#0d8c99] text-white border-none rounded-lg text-lg font-medium">
+            Verify
+          </Button>
         </Link>
 
-        <span className="flex justify-center mt-4">
-          You have not received the email?{" "}
-          <span
-            // onClick={handleResend}
-            className="text-[#D17C51] cursor-pointer pl-2"
-          >
+        <p className="mt-6 text-center text-gray-500">
+          Didn't receive code?{" "}
+          <span className="text-[#10A4B2] cursor-pointer font-medium hover:underline">
             Resend
           </span>
-        </span>
+        </p>
       </div>
     </div>
   );
 };
-
 export default Verify;

@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { Select } from "antd";
 
-const UserGrowthChart = () => {
+const ProviderGrowth = () => {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [years, setYears] = useState([]);
@@ -57,7 +57,7 @@ const UserGrowthChart = () => {
     <div className="w-full h-[350px]">
       {/* Header Section */}
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-700">Users growth</h3>
+        <h3 className="text-lg font-semibold text-gray-700">Provider growth</h3>
         <Select
           value={year}
           onChange={setYear}
@@ -118,4 +118,4 @@ const UserGrowthChart = () => {
   );
 };
 
-export default UserGrowthChart;
+export default ProviderGrowth;
