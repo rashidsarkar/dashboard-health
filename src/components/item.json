@@ -1,0 +1,54 @@
+[
+  {
+    "key": "dashboard",
+    "label": "Dashboard",
+    "icon": "FaHome",
+    "link": "/"
+  },
+  {
+    "key": "userManagement",
+    "label": "User Management",
+    "icon": "FiUser",
+    "link": "/dashboard/UserManagement"
+  },
+
+  {
+    "key": "subscription",
+    "label": "Subscription",
+    "icon": "TbCategory2",
+    "link": "/dashboard/Subscription"
+  },
+  {
+    "key": "settings",
+    "label": "Settings",
+    "icon": "IoSettingsOutline",
+    "link": "/dashboard/Settings/profile",
+    "children": [
+      {
+        "key": "profile",
+        "label": "Profile",
+        "link": "/dashboard/Settings/profile"
+      },
+      {
+        "key": "terms",
+        "label": "Terms & Condition",
+        "link": "/dashboard/Settings/Terms&Condition"
+      },
+      {
+        "key": "privacy",
+        "label": "Privacy Policy",
+        "link": "/dashboard/Settings/PrivacyPolicy"
+      },
+      {
+        "key": "faq",
+        "label": "FAQ",
+        "link": "/dashboard/Settings/FAQ"
+      },
+      {
+        "key": "about",
+        "label": "About Us",
+        "link": "/dashboard/Settings/aboutUs"
+      }
+    ]
+  }
+]
