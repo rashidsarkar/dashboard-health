@@ -1,73 +1,77 @@
-import React, { useState } from "react";
-import { Bell, Clock, Trash2 } from "lucide-react";
-import { Navigate } from "../../Navigate";
+import React, { useEffect } from "react";
+import { Clock, Trash2 } from "lucide-react";
+import { message } from "antd";
+import {
+  useGetNotificationQuery,
+  useSeeNotificationMutation,
+  useDeleteNotificationMutation,
+} from "../redux/api/notificationApi";
+import { formatRelativeTime } from "../../utils/timeUtils";
 
 const Notification = () => {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "New Order Received",
-      message: "You have received a new order from John Doe.",
-      time: "2 min ago",
-    },
-    {
-      id: 2,
-      title: "Product Out of Stock",
-      message: "Your product 'Red Hoodie' is now out of stock.",
-      time: "1 hour ago",
-    },
-    {
-      id: 3,
-      title: "New Review Added",
-      message: "A customer left a 5-star review on your product.",
-      time: "3 hours ago",
-    },
-  ]);
+  const { data, isLoading } = useGetNotificationQuery();
+  const [seeNotification] = useSeeNotificationMutation();
+  const [deleteNotification] = useDeleteNotificationMutation();
 
-  // Delete notification
-  const handleDelete = (id) => {
-    setNotifications((prev) => prev.filter((note) => note.id !== id));
+  const notifications = data?.data?.result || [];
+
+  // 1. Mark as seen when visiting the page
+  useEffect(() => {
+    const markAsSeen = async () => {
+      try {
+        await seeNotification().unwrap();
+      } catch (err) {
+        console.error("Failed to mark seen:", err);
+      }
+    };
+    markAsSeen();
+  }, [seeNotification]);
+
+  // 2. Handle Delete
+  const handleDelete = async (id) => {
+    try {
+      await deleteNotification(id).unwrap();
+      message.success("Notification deleted");
+    } catch (err) {
+      message.error("Failed to delete notification");
+    }
   };
+
+  if (isLoading) return <p className="mt-10 text-center">Loading...</p>;
 
   return (
     <div className="bg-white p-3 h-[87vh] overflow-auto">
-      <Navigate title={"Notification"} />
-
       <div className="space-y-4">
         {notifications.map((note) => (
           <div
-            key={note.id}
-            className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200"
+            key={note?._id}
+            className="p-4 transition border border-gray-200 rounded-lg hover:shadow-md"
           >
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-lg font-semibold text-gray-800">{note.title}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {note?.title}
+                  </h3>
                   <div className="flex items-center gap-1 text-sm text-gray-500">
                     <Clock className="w-4 h-4" />
-                    {note.time}
+                    {formatRelativeTime(note?.createdAt)}
                   </div>
                 </div>
-                <p className="text-gray-600">{note.message}</p>
+                <p className="text-gray-600">{note?.message}</p>
               </div>
 
               <button
-                onClick={() => handleDelete(note.id)}
-                className="ml-4 text-red-500 hover:text-red-700 transition"
-                title="Delete"
+                onClick={() => handleDelete(note?._id)} // Delete Function
+                className="ml-4 text-[#0A6169] transition hover:text-[#0A6169]"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
             </div>
           </div>
         ))}
-
-        {notifications.length === 0 && (
-          <p className="text-center text-gray-500">No notifications found</p>
-        )}
       </div>
     </div>
   );
 };
-
 export default Notification;
