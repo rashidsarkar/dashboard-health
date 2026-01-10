@@ -1,6 +1,5 @@
 import { baseApi } from "./baseApi";
 
-
 const useApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     loginAdmin: builder.mutation({
@@ -12,11 +11,11 @@ const useApi = baseApi.injectEndpoints({
         };
       },
     }),
-    
+
     getProfile: builder.query({
       query: () => {
         return {
-          url: "/admin/profile",
+          url: "/auth/admin/me",
           method: "GET",
         };
       },
@@ -52,7 +51,7 @@ const useApi = baseApi.injectEndpoints({
     updateProfile: builder.mutation({
       query: (data) => {
         return {
-          url: "/admin/edit-profile",
+          url: "/user/updateMe",
           method: "PATCH",
           body: data,
         };
@@ -63,7 +62,7 @@ const useApi = baseApi.injectEndpoints({
       query: (data) => {
         return {
           url: "/auth/change-password",
-          method: "PUT",
+          method: "POST",
           body: data,
         };
       },
@@ -74,7 +73,6 @@ const useApi = baseApi.injectEndpoints({
           url: `/dashboard/get-all-user?role=${user}&page=${page}&searchTerm=${search}`,
           method: "GET",
         };
-
       },
       providesTags: ["host"],
     }),
@@ -85,7 +83,7 @@ const useApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
-      invalidatesTags: ["host"], 
+      invalidatesTags: ["host"],
     }),
   }),
 });

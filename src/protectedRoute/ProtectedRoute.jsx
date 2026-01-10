@@ -4,8 +4,8 @@
 
 // import { useGetSuperAdminQuery } from "../page/redux/api/userApi";
 
-import { useSelector } from 'react-redux';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
   // const location = useLocation();
@@ -35,13 +35,13 @@ const ProtectedRoute = ({ children }) => {
   // }
 
   // return children;
-  
-  const {token} = useSelector((state) => state.logInUser)
-  console.log(token)
+
+  const { token } = useSelector((state) => state.logInUser);
+  console.log(token);
   const { pathname } = useLocation();
 
   if (!token) {
-      return <Navigate to="/login" state={{ path: pathname }}></Navigate>;
+    return <Navigate to="/login" state={{ path: pathname }}></Navigate>;
   }
   return children;
 };
