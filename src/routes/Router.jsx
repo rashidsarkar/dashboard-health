@@ -21,6 +21,7 @@ import Login from "../Auth/Login";
 import ForgetPass from "../Auth/ForgetPass";
 import ProviderManagement from "../page/ProviderManagement/ProviderManagement";
 import BookingManagement from "../page/BookingManagement/BookingManagement";
+import SingleBooking from "../page/BookingManagement/SingleBooking";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,11 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/BookingManagement",
         element: <BookingManagement></BookingManagement>,
+      },
+      {
+        //  navigate(`/booking-details/${record._id}`)}
+        path: "/dashboard/booking-details/:id",
+        element: <SingleBooking></SingleBooking>,
       },
       {
         path: "/dashboard/CategoriesManagement/Categories",
