@@ -12,7 +12,7 @@ function BookingManagement() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-  const [activeTab, setActiveTab] = useState("requested");
+  // const [activeTab, setActiveTab] = useState("requested");
 
   // 1. Fetch real data from API
   const { data, isLoading, isError } = useGetAppointmentQuery({
@@ -22,13 +22,13 @@ function BookingManagement() {
 
   const appointments = data?.data?.data || [];
   const meta = data?.data?.meta || {};
-
+  // console.log(appointments);
   // 2. Filter data based on tabs to match backend status
-  const filteredData = appointments.filter((item) => {
-    if (activeTab === "requested") return item.status === "PENDING";
-    if (activeTab === "cancelled") return item.status === "CANCELLED";
-    return true;
-  });
+  // const filteredData = appointments.filter((item) => {
+  //   if (activeTab === "requested") return item.status === "PENDING";
+  //   if (activeTab === "cancelled") return item.status === "CANCELLED";
+  //   return true;
+  // });
 
   const columns = [
     {
@@ -169,7 +169,7 @@ function BookingManagement() {
             </h1>
           </div>
 
-          <div className="flex gap-4">
+          {/* <div className="flex gap-4">
             <button
               onClick={() => setActiveTab("requested")}
               className={`px-6 py-2 rounded-xl border transition-all font-semibold ${
@@ -190,13 +190,13 @@ function BookingManagement() {
             >
               Cancelled
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* Table Section */}
         <div className="w-full overflow-x-auto bg-white border border-gray-100 shadow-sm rounded-xl">
           <Table
-            dataSource={filteredData}
+            dataSource={appointments}
             columns={columns}
             pagination={false}
             rowKey="_id"
