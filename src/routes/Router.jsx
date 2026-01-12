@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import DashboardLayout from "../layout/dashboardLayout/DashboardLayout";
 import Dashboard from "../components/Dashboard/Dashboard";
 import UserManagement from "../page/UserManagement/UserManagement";
-import CreatorManagement from "../page/CreatorManagement/CreatorManagement";
 
 import Subscription from "../page/Subscription/Subscription";
 
@@ -22,6 +21,7 @@ import ForgetPass from "../Auth/ForgetPass";
 import ProviderManagement from "../page/ProviderManagement/ProviderManagement";
 import BookingManagement from "../page/BookingManagement/BookingManagement";
 import SingleBooking from "../page/BookingManagement/SingleBooking";
+import SingleProvider from "../page/ProviderManagement/SingleProvider";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +48,10 @@ export const router = createBrowserRouter([
         //  navigate(`/booking-details/${record._id}`)}
         path: "/dashboard/booking-details/:id",
         element: <SingleBooking></SingleBooking>,
+      },
+      {
+        path: "/dashboard/provider-details/:id",
+        element: <SingleProvider></SingleProvider>,
       },
       {
         path: "/dashboard/CategoriesManagement/Categories",
