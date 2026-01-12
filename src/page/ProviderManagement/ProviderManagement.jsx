@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react"; // Added useMemo
 import { Table, Select, message, Spin } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { LuEye } from "react-icons/lu";
@@ -11,32 +11,40 @@ import {
   useToggleProviderBlockMutation,
 } from "../redux/api/providerApi";
 import { imageUrl } from "../../page/redux/api/baseApi";
-// import { useGetProviderTypesQuery } from "../redux/api/providerApi";
 
 const ProviderManagement = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [activeTab, setActiveTab] = useState("active");
-  const [selectedTypeId, setSelectedTypeId] = useState(null); // For sorting
+  const [selectedTypeId, setSelectedTypeId] = useState(null);
   const pageSize = 10;
 
-  // 1. Fetch Provider Types for the Select dropdown
+  // 1. Fetch Provider Types
   const { data: typeData } = useGetProviderTypesQuery();
 
-  // 2. Fetch Providers based on Tab and Selected Sort Type
-
-  const { data, isLoading } = useGetProvidersQuery({
-    // providerTypeId: selectedTypeId,
+  // 2. Prepare Query Params (We don't send 'status' to the API anymore for filtering)
+  const queryParams = {
     page: currentPage,
     limit: pageSize,
-  });
-  console.log(data);
+    ...(selectedTypeId && { providerTypeId: selectedTypeId }),
+  };
+
+  const { data, isLoading } = useGetProvidersQuery(queryParams);
   const [toggleBlock] = useToggleProviderBlockMutation();
 
   const providers = data?.data?.data || [];
   const meta = data?.data?.meta || {};
 
-  // Handle Block Toggle
+  // 3. Client-side filtering logic based on providers[0]?.user[0]?.isBlocked
+  const filteredProviders = useMemo(() => {
+    return providers.filter((item) => {
+      const isBlocked = item?.user?.[0]?.isBlocked;
+      if (activeTab === "active") return isBlocked === false;
+      if (activeTab === "blocked") return isBlocked === true;
+      return true;
+    });
+  }, [providers, activeTab]);
+
   const handleToggle = async (id, name) => {
     try {
       await toggleBlock(id).unwrap();
@@ -103,6 +111,7 @@ const ProviderManagement = () => {
               activeTab === "active" ? "bg-[#EF4444]" : "bg-green-500"
             }`}
           >
+            {/* If tab is active, show X (to block). If tab is blocked, show same icon or unblock icon */}
             <RxCross2 size={18} />
           </button>
         </div>
@@ -113,7 +122,6 @@ const ProviderManagement = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
       <div className="flex-1 p-8">
-        {/* Header Section */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
             <IoArrowBackOutline
@@ -125,12 +133,9 @@ const ProviderManagement = () => {
             </h1>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex gap-4">
             <button
-              onClick={() => {
-                setActiveTab("active");
-                setCurrentPage(1);
-              }}
+              onClick={() => setActiveTab("active")}
               className={`px-5 py-2 border rounded-xl font-medium transition-all ${
                 activeTab === "active"
                   ? "bg-white border-[#10A4B2] text-[#10A4B2] shadow-sm"
@@ -140,11 +145,8 @@ const ProviderManagement = () => {
               Active Provider
             </button>
             <button
-              onClick={() => {
-                setActiveTab("blocked");
-                setCurrentPage(1);
-              }}
-              className={`px-5 py-2 border rounded-xl font-medium transition-all ${
+              onClick={() => setActiveTab("blocked")}
+              className={`px-6 py-2 border rounded-xl font-medium transition-all ${
                 activeTab === "blocked"
                   ? "bg-white border-red-500 text-red-500 shadow-sm"
                   : "text-gray-400 border-gray-200"
@@ -153,24 +155,22 @@ const ProviderManagement = () => {
               Blocked Provider
             </button>
 
-            {/* Dynamic Sort Dropdown */}
             <Select
               placeholder="Sort by Type"
               allowClear
               className="w-40 custom-select"
-              onChange={(value) => {
-                setSelectedTypeId(value);
+              onChange={(v) => {
+                setSelectedTypeId(v);
                 setCurrentPage(1);
               }}
-              options={typeData?.data?.map((type) => ({
-                value: type._id,
-                label: type.label,
+              options={typeData?.data?.map((t) => ({
+                value: t._id,
+                label: t.label,
               }))}
             />
           </div>
         </div>
 
-        {/* Table Area */}
         <div className="p-4 bg-white border border-gray-100 shadow-sm rounded-xl">
           {isLoading ? (
             <div className="flex justify-center py-20">
@@ -178,7 +178,7 @@ const ProviderManagement = () => {
             </div>
           ) : (
             <Table
-              dataSource={providers}
+              dataSource={filteredProviders} // Using the filtered list here
               columns={columns}
               pagination={false}
               rowKey="_id"
