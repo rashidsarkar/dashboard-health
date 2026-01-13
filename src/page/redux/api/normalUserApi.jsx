@@ -25,7 +25,19 @@ const normalUserApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+    // Get Single User Details
+    getSingleUser: builder.query({
+      query: (id) => ({
+        url: `/normal-User/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Users"],
+    }),
   }),
 });
 
-export const { useGetNormalUsersQuery, useBlockUserMutation } = normalUserApi;
+export const {
+  useGetNormalUsersQuery,
+  useBlockUserMutation,
+  useGetSingleUserQuery,
+} = normalUserApi;

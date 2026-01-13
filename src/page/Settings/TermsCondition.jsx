@@ -32,8 +32,8 @@ const TermsCondition = () => {
   };
 
   return (
-    <div className=" bg-white p-3 ">
-       <Navigate title="Terms And Condition" />
+    <div className="p-3 bg-white ">
+      <Navigate title="Terms And Condition" />
 
       <JoditEditor
         ref={editor}
@@ -44,8 +44,8 @@ const TermsCondition = () => {
         // onChange={newContent => { }}
       />
 
-      <div className="mt-5 flex justify-center">
-        <button className="bg-[#E63946] py-2 px-4 rounded text-white">
+      <div className="flex justify-center mt-5">
+        <button className="bg-[#10A4B2] py-2 px-4 rounded text-white">
           Save & change
         </button>
       </div>

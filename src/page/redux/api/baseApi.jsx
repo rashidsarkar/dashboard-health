@@ -26,5 +26,5 @@ export const baseApi = createApi({
   endpoints: () => ({}),
 });
 
-export const imageUrl = "http://192.168.0.109:3333";
+export const imageUrl = "http://192.168.0.105:3333";
 // asdfsf
