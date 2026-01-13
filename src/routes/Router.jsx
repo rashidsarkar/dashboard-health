@@ -22,6 +22,7 @@ import ProviderManagement from "../page/ProviderManagement/ProviderManagement";
 import BookingManagement from "../page/BookingManagement/BookingManagement";
 import SingleBooking from "../page/BookingManagement/SingleBooking";
 import SingleProvider from "../page/ProviderManagement/SingleProvider";
+import SingleUserDetails from "../page/UserManagement/SingleUserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,12 @@ export const router = createBrowserRouter([
         path: "/dashboard/UserManagement",
         element: <UserManagement></UserManagement>,
       },
+
+      {
+        path: "/dashboard/user-details/:id",
+        element: <SingleUserDetails></SingleUserDetails>,
+      },
+
       {
         path: "/dashboard/ProviderManagement",
         element: <ProviderManagement></ProviderManagement>,
