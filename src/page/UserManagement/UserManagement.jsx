@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Table, message, Spin } from "antd";
 import { LuEye } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx"; // Block Icon
@@ -11,6 +10,7 @@ import {
   useBlockUserMutation,
 } from "../redux/api/normalUserApi";
 import { imageUrl } from "../../page/redux/api/baseApi";
+import { useState } from "react";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -83,6 +83,7 @@ const UserManagement = () => {
           >
             <LuEye size={18} />
           </button>
+          {/* <Navigate title="Provider Management" /> */}
 
           {/* Toggle Button */}
           <button

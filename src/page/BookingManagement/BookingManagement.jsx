@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import CustomPagination from "../../components/CustomPagination/CustomPagination";
 import { useGetAppointmentQuery } from "../redux/api/BookingApi"; // Ensure path is correct
 import { imageUrl } from "../redux/api/baseApi"; // Ensure path is correct
+import { Navigate } from "../../Navigate";
 
 function BookingManagement() {
   const navigate = useNavigate();
@@ -160,13 +161,15 @@ function BookingManagement() {
         {/* Header Section */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
-            <IoArrowBackOutline
+            {/* <IoArrowBackOutline
               className="text-[#10A4B2] text-2xl cursor-pointer"
               onClick={() => navigate(-1)}
-            />
-            <h1 className="text-xl font-bold text-gray-800">
+            /> */}
+            <Navigate title="Booking management" />
+
+            {/* <h1 className="text-xl font-bold text-gray-800">
               Booking management
-            </h1>
+            </h1> */}
           </div>
 
           {/* <div className="flex gap-4">

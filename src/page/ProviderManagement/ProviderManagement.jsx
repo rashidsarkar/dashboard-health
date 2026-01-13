@@ -11,6 +11,7 @@ import {
   useToggleProviderBlockMutation,
 } from "../redux/api/providerApi";
 import { imageUrl } from "../../page/redux/api/baseApi";
+import { Navigate } from "../../Navigate";
 
 const ProviderManagement = () => {
   const navigate = useNavigate();
@@ -124,13 +125,14 @@ const ProviderManagement = () => {
       <div className="flex-1 p-8">
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
-            <IoArrowBackOutline
+            {/* <IoArrowBackOutline
               className="text-2xl cursor-pointer"
               onClick={() => navigate(-1)}
             />
             <h1 className="text-lg font-bold text-gray-800">
               Provider Management
-            </h1>
+            </h1> */}
+            <Navigate title="Provider Management" />
           </div>
 
           <div className="flex gap-4">
