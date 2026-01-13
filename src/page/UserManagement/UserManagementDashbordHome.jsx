@@ -101,6 +101,7 @@ const BookingManagementDashboardHome = () => {
           <button
             onClick={() =>
               // Passing full record as state to Details page
+              // dashboard/user-details/693fe713259dc7ca1fee9b01
               navigate(`/dashboard/user-details/${record._id}`, {
                 state: { booking: record },
               })
