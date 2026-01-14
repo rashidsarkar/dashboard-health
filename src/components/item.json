@@ -25,6 +25,12 @@
     "link": "/dashboard/BookingManagement"
   },
   {
+    "key": "addService",
+    "label": "Add Service",
+    "icon": "MdOutlineMedicalServices",
+    "link": "/dashboard/serviceManagement"
+  },
+  {
     "key": "settings",
     "label": "Settings",
     "icon": "IoSettingsOutline",

@@ -23,6 +23,7 @@ import BookingManagement from "../page/BookingManagement/BookingManagement";
 import SingleBooking from "../page/BookingManagement/SingleBooking";
 import SingleProvider from "../page/ProviderManagement/SingleProvider";
 import SingleUserDetails from "../page/UserManagement/SingleUserManagement";
+import ServiceManagement from "../page/ServiceManagement/ServiceManagement";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,11 @@ export const router = createBrowserRouter([
         //  navigate(`/booking-details/${record._id}`)}
         path: "/dashboard/booking-details/:id",
         element: <SingleBooking></SingleBooking>,
+      },
+      {
+        path: "/dashboard/serviceManagement",
+        //  "/dashboard/addService"
+        element: <ServiceManagement></ServiceManagement>,
       },
       {
         path: "/dashboard/provider-details/:id",

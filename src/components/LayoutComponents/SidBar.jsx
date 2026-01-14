@@ -8,6 +8,7 @@ import user from "../../assets/routerImg/user.png";
 import logo from "../../assets/header/logo.png";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { MdOutlineMedicalServices } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronRight, FaHome } from "react-icons/fa";
 import { IoIosLogIn } from "react-icons/io";
@@ -19,12 +20,13 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbCategory2 } from "react-icons/tb";
 
 import items from "../item.json";
-
+// import { MdOutlineMedicalServices } from "react-icons/md";
 const icons = {
   FaHome,
   FiUser,
   TbCategory2,
   IoSettingsOutline,
+  MdOutlineMedicalServices,
 };
 
 const SidBar = () => {
