@@ -18,7 +18,7 @@ import { logout } from "../../page/redux/features/auth/authSlice";
 import { FiUser } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { TbCategory2 } from "react-icons/tb";
-
+import { FaPlusCircle } from "react-icons/fa";
 import items from "../item.json";
 // import { MdOutlineMedicalServices } from "react-icons/md";
 const icons = {
@@ -27,6 +27,7 @@ const icons = {
   TbCategory2,
   IoSettingsOutline,
   MdOutlineMedicalServices,
+  FaPlusCircle,
 };
 
 const SidBar = () => {

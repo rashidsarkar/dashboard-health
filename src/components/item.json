@@ -31,6 +31,12 @@
     "link": "/dashboard/serviceManagement"
   },
   {
+    "key": "providerType",
+    "label": "Provider Type",
+    "icon": "FaPlusCircle",
+    "link": "/dashboard/providerType"
+  },
+  {
     "key": "settings",
     "label": "Settings",
     "icon": "IoSettingsOutline",
