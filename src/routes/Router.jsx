@@ -25,6 +25,7 @@ import SingleProvider from "../page/ProviderManagement/SingleProvider";
 import SingleUserDetails from "../page/UserManagement/SingleUserManagement";
 import ServiceManagement from "../page/ServiceManagement/ServiceManagement";
 import ProviderType from "../page/Provider type/ProviderType";
+import Articles from "../page/Articles/Articles";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,11 @@ export const router = createBrowserRouter([
         path: "/dashboard/providerType",
         //  "/dashboard/addService"
         element: <ProviderType></ProviderType>,
+      },
+      {
+        path: "/dashboard/articles",
+        //  "/dashboard/addService"
+        element: <Articles></Articles>,
       },
       {
         path: "/dashboard/provider-details/:id",
