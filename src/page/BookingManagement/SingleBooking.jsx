@@ -1,22 +1,19 @@
 import React from "react";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { useNavigate, useLocation } from "react-router-dom"; // Added useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 import { imageUrl } from "../redux/api/baseApi";
 
 function SingleBooking() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // This is the data we passed from the Management page
   const booking = location.state?.booking;
 
-  // Function to fix image paths from backend
   const getImg = (path) => {
     if (!path) return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
     return `${imageUrl}/${path.replace(/\\/g, "/")}`;
   };
-
-  // Fallback if someone refreshes the page (state clears on refresh)
+  console.log(booking);
   if (!booking) {
     return (
       <div className="p-10 text-center">
@@ -44,15 +41,21 @@ function SingleBooking() {
 
       {/* Main Card */}
       <div className="rounded-sm p-12 min-h-[80vh] bg-white shadow-sm border border-gray-100">
-        {/* User Info Section */}
-        <div className="flex flex-col gap-4">
+        {/* User Info Section - Clickable */}
+        <div
+          onClick={() =>
+            navigate(`/dashboard/user-details/${booking.normalUser?._id}`)
+          }
+          className="flex flex-col gap-4 cursor-pointer group w-fit"
+          title="View User Profile"
+        >
           <img
             src={getImg(booking.normalUser?.profile_image)}
             alt={booking.normalUser?.fullName}
-            className="object-cover w-32 h-32 shadow-sm rounded-3xl"
+            className="object-cover w-32 h-32 shadow-sm rounded-3xl group-hover:ring-2 ring-[#10A4B2] transition-all"
           />
           <div>
-            <h2 className="mb-2 text-2xl font-bold text-gray-800">
+            <h2 className="mb-2 text-2xl font-bold text-gray-800 group-hover:text-[#10A4B2] transition-colors">
               {booking.normalUser?.fullName}
             </h2>
             <div className="grid grid-cols-[100px_1fr] gap-y-1 text-sm font-medium">
@@ -68,8 +71,8 @@ function SingleBooking() {
           </div>
         </div>
 
-        {/* Appointment Grid Details (Real Data) */}
-        <div className="grid grid-cols-5 gap-8 mt-24">
+        {/* Appointment Grid Details */}
+        <div className="grid grid-cols-5 gap-8 pt-10 mt-24 border-t border-gray-50">
           <div>
             <h3 className="mb-3 font-bold text-gray-900">Booking Date</h3>
             <p className="text-sm text-gray-700">
@@ -106,20 +109,25 @@ function SingleBooking() {
           </div>
         </div>
 
-        {/* Service Provider Section */}
+        {/* Service Provider Section - Clickable */}
         <div className="mt-24">
           <h3 className="mb-6 text-xl font-bold text-gray-800">
             Service Provider
           </h3>
-          <div className="flex items-center gap-5">
-            <div className="flex items-center justify-center w-24 h-24 bg-gray-100 border rounded-2xl">
-              {/* Fallback if provider doesn't have an image field in your JSON */}
+          <div
+            className="flex items-center gap-5 cursor-pointer group w-fit"
+            onClick={() =>
+              navigate(`/dashboard/provider-details/${booking.provider?._id}`)
+            }
+            title="View Provider Profile"
+          >
+            <div className="flex items-center justify-center w-24 h-24 bg-gray-100 border rounded-2xl group-hover:ring-2 ring-[#10A4B2] transition-all">
               <span className="text-2xl font-bold text-teal-600">
-                {booking.provider?.fullName[0]}
+                {booking.provider?.fullName?.[0]}
               </span>
             </div>
             <div className="flex flex-col gap-1">
-              <h4 className="text-xl font-bold text-gray-900">
+              <h4 className="text-xl font-bold text-gray-900 group-hover:text-[#10A4B2] transition-colors">
                 {booking.provider?.fullName}
               </h4>
               <p className="text-sm text-gray-500">{booking.service?.title}</p>
