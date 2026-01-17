@@ -20,6 +20,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { TbCategory2 } from "react-icons/tb";
 import { FaPlusCircle } from "react-icons/fa";
 import items from "../item.json";
+import { MdOutlineArticle } from "react-icons/md";
 // import { MdOutlineMedicalServices } from "react-icons/md";
 const icons = {
   FaHome,
@@ -28,6 +29,7 @@ const icons = {
   IoSettingsOutline,
   MdOutlineMedicalServices,
   FaPlusCircle,
+  MdOutlineArticle,
 };
 
 const SidBar = () => {

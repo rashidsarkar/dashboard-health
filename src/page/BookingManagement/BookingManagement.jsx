@@ -22,6 +22,7 @@ function BookingManagement() {
   });
 
   const appointments = data?.data?.data || [];
+  console.log(appointments);
   const meta = data?.data?.meta || {};
   // console.log(appointments);
   // 2. Filter data based on tabs to match backend status

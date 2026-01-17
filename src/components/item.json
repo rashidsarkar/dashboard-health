@@ -37,6 +37,12 @@
     "link": "/dashboard/providerType"
   },
   {
+    "key": "articles",
+    "label": "Articles",
+    "icon": "MdOutlineArticle",
+    "link": "/dashboard/articles"
+  },
+  {
     "key": "settings",
     "label": "Settings",
     "icon": "IoSettingsOutline",
