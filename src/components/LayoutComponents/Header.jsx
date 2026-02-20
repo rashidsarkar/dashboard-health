@@ -49,7 +49,7 @@ const Header = () => {
 
   const onParentClick = (key) => {
     setExpandedKeys((prev) =>
-      prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key]
+      prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key],
     );
   };
 
@@ -81,9 +81,6 @@ const Header = () => {
                 <LuBell />
               </div>
             </Link>
-            <span className="absolute top-0 right-0 w-5 h-5 bg-red-600 text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white">
-              0
-            </span>
           </div>
 
           {/* Real User Profile Info */}
