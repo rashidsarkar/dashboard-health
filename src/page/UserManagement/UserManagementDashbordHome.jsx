@@ -1,28 +1,54 @@
 import React from "react";
-import { Table, message, Spin } from "antd";
+import { Table, message, Spin, Modal } from "antd"; // Added Modal
 import { LuEye } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
-import { useGetAppointmentQuery } from "../redux/api/BookingApi";
+import {
+  useGetAppointmentQuery,
+  useDeleteAppointmentMutation,
+} from "../redux/api/BookingApi";
 import { imageUrl } from "../redux/api/baseApi";
 
 const BookingManagementDashboardHome = () => {
   const navigate = useNavigate();
 
-  // 1. Fetch only 4 data from API
+  // 1. Fetch only 4 data items
   const { data, isLoading, isError } = useGetAppointmentQuery({
     page: 1,
     limit: 4,
   });
 
+  // 2. Hook for Deletion
+  const [deleteAppointment, { isLoading: isDeleting }] =
+    useDeleteAppointmentMutation();
+
   const appointments = data?.data?.data || [];
+
+  // 3. Handle Delete logic
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this appointment?",
+      content: `User: ${record.normalUser?.fullName}`,
+      centered: true,
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: async () => {
+        try {
+          await deleteAppointment(record._id).unwrap();
+          message.success("Appointment deleted successfully");
+        } catch (err) {
+          message.error(err?.data?.message || "Failed to delete appointment");
+        }
+      },
+    });
+  };
 
   const columns = [
     {
       title: "User Name",
       key: "name",
       render: (_, record) => {
-        // Image path normalization for Windows backslashes
         const profileImg = record.normalUser?.profile_image
           ? `${imageUrl}/${record.normalUser.profile_image.replace(/\\/g, "/")}`
           : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -43,10 +69,10 @@ const BookingManagementDashboardHome = () => {
     },
     {
       title: "Provider type",
-      dataIndex: ["provider", "providerTypeKey"], // Correct nested key mapping
+      dataIndex: ["provider", "providerTypeKey"],
       key: "providerType",
       render: (text) => (
-        <span className="capitalize">{text?.toLowerCase()}</span>
+        <span className="text-gray-600 capitalize">{text?.toLowerCase()}</span>
       ),
     },
     {
@@ -100,9 +126,6 @@ const BookingManagementDashboardHome = () => {
         <div className="flex justify-end gap-2 pr-4">
           <button
             onClick={() =>
-              // Passing full record as state to Details page
-              // dashboard/user-details/693fe713259dc7ca1fee9b01
-              // dashboard/booking-details/6953a7c1a75c6ece3a517acc
               navigate(`/dashboard/booking-details/${record._id}`, {
                 state: { booking: record },
               })
@@ -112,13 +135,11 @@ const BookingManagementDashboardHome = () => {
             <LuEye size={18} />
           </button>
 
+          {/* Corrected delete button */}
           <button
-            onClick={() =>
-              message.error(
-                `Cancelled booking for ${record.normalUser?.fullName}`
-              )
-            }
-            className="w-8 h-8 flex justify-center items-center bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-all"
+            onClick={() => handleDelete(record)}
+            disabled={isDeleting}
+            className="w-8 h-8 flex justify-center items-center bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-all disabled:opacity-50"
           >
             <RxCross2 size={18} />
           </button>
@@ -130,12 +151,14 @@ const BookingManagementDashboardHome = () => {
   if (isLoading)
     return (
       <div className="flex justify-center p-10">
-        <Spin />
+        <Spin size="large" />
       </div>
     );
   if (isError)
     return (
-      <div className="py-4 text-center text-red-500">Failed to load data</div>
+      <div className="py-4 font-medium text-center text-red-500">
+        Failed to load appointments
+      </div>
     );
 
   return (

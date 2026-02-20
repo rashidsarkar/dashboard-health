@@ -1,43 +1,59 @@
 import React, { useState } from "react";
-import { Table, message, Spin } from "antd";
+import { Table, message, Spin, Modal } from "antd";
 import { LuEye } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
-import { IoArrowBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import CustomPagination from "../../components/CustomPagination/CustomPagination";
-import { useGetAppointmentQuery } from "../redux/api/BookingApi"; // Ensure path is correct
-import { imageUrl } from "../redux/api/baseApi"; // Ensure path is correct
+import {
+  useGetAppointmentQuery,
+  useDeleteAppointmentMutation,
+} from "../redux/api/BookingApi";
+import { imageUrl } from "../redux/api/baseApi";
 import { Navigate } from "../../Navigate";
 
 function BookingManagement() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState("PENDING"); // 'PENDING' for Requested, 'CANCELLED' for Cancelled
   const pageSize = 10;
-  // const [activeTab, setActiveTab] = useState("requested");
 
-  // 1. Fetch real data from API
+  // 1. Fetch data with Status Filter
   const { data, isLoading, isError } = useGetAppointmentQuery({
     page: currentPage,
     limit: pageSize,
+    status: activeTab,
   });
 
+  // 2. Delete Mutation
+  const [deleteAppointment] = useDeleteAppointmentMutation();
+
   const appointments = data?.data?.data || [];
-  console.log(appointments);
   const meta = data?.data?.meta || {};
-  // console.log(appointments);
-  // 2. Filter data based on tabs to match backend status
-  // const filteredData = appointments.filter((item) => {
-  //   if (activeTab === "requested") return item.status === "PENDING";
-  //   if (activeTab === "cancelled") return item.status === "CANCELLED";
-  //   return true;
-  // });
+
+  // Delete Handler
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: "Are you sure you want to delete this booking?",
+      content: `User: ${record.normalUser?.fullName}`,
+      centered: true,
+      okText: "Delete",
+      okType: "danger",
+      onOk: async () => {
+        try {
+          await deleteAppointment(record._id).unwrap();
+          message.success("Booking deleted successfully");
+        } catch (err) {
+          message.error("Failed to delete booking");
+        }
+      },
+    });
+  };
 
   const columns = [
     {
       title: "User Name",
       key: "name",
       render: (_, record) => {
-        // Handle Windows-style backslashes in image paths
         const profileImg = record.normalUser?.profile_image
           ? `${imageUrl}/${record.normalUser.profile_image.replace(/\\/g, "/")}`
           : "https://cdn-icons-png.flaticon.com/512/149/149071.png";
@@ -46,7 +62,7 @@ function BookingManagement() {
           <div className="flex items-center gap-3">
             <img
               src={profileImg}
-              className="object-cover w-10 h-10 border border-gray-100 rounded-lg shadow-sm"
+              className="object-cover w-10 h-10 border rounded-lg shadow-sm"
               alt="User"
             />
             <span className="font-medium text-gray-700">
@@ -58,7 +74,7 @@ function BookingManagement() {
     },
     {
       title: "Provider type",
-      dataIndex: ["provider", "providerTypeKey"], // Access nested object keys
+      dataIndex: ["provider", "providerTypeKey"],
       key: "providerType",
       render: (text) => (
         <span className="text-gray-600 capitalize">{text?.toLowerCase()}</span>
@@ -99,7 +115,7 @@ function BookingManagement() {
       key: "status",
       render: (status) => (
         <span
-          className={`font-bold px-3 py-1 rounded-full text-xs ${
+          className={`font-bold px-3 py-1 rounded-full text-[10px] ${
             status === "PENDING"
               ? "bg-orange-50 text-orange-500"
               : "bg-red-50 text-red-500"
@@ -115,7 +131,6 @@ function BookingManagement() {
       align: "right",
       render: (_, record) => (
         <div className="flex justify-end gap-2 pr-4">
-          {/* Eye Button: Navigates and passes the WHOLE record object as state */}
           <button
             onClick={() =>
               navigate(`/dashboard/booking-details/${record._id}`, {
@@ -128,11 +143,7 @@ function BookingManagement() {
           </button>
 
           <button
-            onClick={() =>
-              message.error(
-                `Cancelled action for ${record.normalUser?.fullName}`
-              )
-            }
+            onClick={() => handleDelete(record)}
             className="w-8 h-8 flex justify-center items-center bg-[#EF4444] text-white rounded-md hover:bg-red-600 transition-all"
           >
             <RxCross2 size={18} />
@@ -149,35 +160,22 @@ function BookingManagement() {
       </div>
     );
 
-  if (isError)
-    return (
-      <div className="mt-20 font-medium text-center text-red-500">
-        Error loading bookings. Please check your connection.
-      </div>
-    );
-
   return (
     <div className="flex flex-col min-h-screen bg-[#F9FAFB]">
       <div className="flex-1 p-8">
         {/* Header Section */}
         <div className="flex items-center justify-between mb-10">
-          <div className="flex items-center gap-3">
-            {/* <IoArrowBackOutline
-              className="text-[#10A4B2] text-2xl cursor-pointer"
-              onClick={() => navigate(-1)}
-            /> */}
-            <Navigate title="Booking management" />
+          <Navigate title="Booking management" />
 
-            {/* <h1 className="text-xl font-bold text-gray-800">
-              Booking management
-            </h1> */}
-          </div>
-
-          {/* <div className="flex gap-4">
+          {/* Filter Tabs */}
+          <div className="flex gap-4">
             <button
-              onClick={() => setActiveTab("requested")}
+              onClick={() => {
+                setActiveTab("PENDING");
+                setCurrentPage(1);
+              }}
               className={`px-6 py-2 rounded-xl border transition-all font-semibold ${
-                activeTab === "requested"
+                activeTab === "PENDING"
                   ? "bg-white border-[#10A4B2] text-[#10A4B2] shadow-sm"
                   : "bg-white border-gray-200 text-gray-400"
               }`}
@@ -185,16 +183,19 @@ function BookingManagement() {
               Requested
             </button>
             <button
-              onClick={() => setActiveTab("cancelled")}
+              onClick={() => {
+                setActiveTab("CANCELLED");
+                setCurrentPage(1);
+              }}
               className={`px-6 py-2 rounded-xl border transition-all font-semibold ${
-                activeTab === "cancelled"
+                activeTab === "CANCELLED"
                   ? "bg-white border-red-500 text-red-500 shadow-sm"
                   : "bg-white border-gray-200 text-gray-400"
               }`}
             >
               Cancelled
             </button>
-          </div> */}
+          </div>
         </div>
 
         {/* Table Section */}
@@ -209,7 +210,6 @@ function BookingManagement() {
         </div>
       </div>
 
-      {/* Reusable Custom Pagination Component */}
       <CustomPagination
         total={meta.total || 0}
         pageSize={pageSize}
@@ -227,23 +227,16 @@ function BookingManagement() {
           font-size: 15px;
           position: relative;
         }
+        /* Vertical divider in header */
         .custom-booking-table .ant-table-thead > tr > th:not(:last-child)::after {
-          content: "";
-          position: absolute;
-          right: 0;
-          top: 30%;
-          height: 40%;
-          width: 1px;
-          background-color: #f0f0f0;
+          content: ""; position: absolute; right: 0; top: 30%; height: 40%; width: 1px; background-color: #f0f0f0;
         }
         .custom-booking-table .ant-table-tbody > tr > td {
           border-bottom: 1px solid #f9f9f9 !important;
-          padding: 18px 8px !important;
+          padding: 16px 8px !important;
           color: #4B5563;
         }
-        .custom-booking-table .ant-table-tbody > tr:last-child > td {
-          border-bottom: none !important;
-        }
+        .custom-booking-table .ant-table-tbody > tr:last-child > td { border-bottom: none !important; }
       `}</style>
     </div>
   );
